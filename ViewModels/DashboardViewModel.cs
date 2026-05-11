@@ -244,7 +244,7 @@ namespace AppPrestamos.ViewModels
 
             var vencidasHoy = db.Cuotas
                 .Include(c => c.Prestamo).ThenInclude(p => p.Cliente)
-                .Where(c => c.Estado == EstadoCuota.Vencida || (c.Estado == EstadoCuota.Pendiente && c.FechaVencimiento <= hoy))
+                .Where(c => c.Estado == EstadoCuota.Vencida || c.Estado == EstadoCuota.Parcial || (c.Estado == EstadoCuota.Pendiente && c.FechaVencimiento <= hoy))
                 .OrderBy(c => c.FechaVencimiento)
                 .Take(5)
                 .ToList();
@@ -262,7 +262,7 @@ namespace AppPrestamos.ViewModels
 
             var proximas3 = db.Cuotas
                 .Include(c => c.Prestamo).ThenInclude(p => p.Cliente)
-                .Where(c => c.Estado == EstadoCuota.Pendiente && c.FechaVencimiento > hoy && c.FechaVencimiento <= hoy.AddDays(3))
+                .Where(c => (c.Estado == EstadoCuota.Pendiente || c.Estado == EstadoCuota.Parcial) && c.FechaVencimiento > hoy && c.FechaVencimiento <= hoy.AddDays(3))
                 .OrderBy(c => c.FechaVencimiento)
                 .Take(3)
                 .ToList();

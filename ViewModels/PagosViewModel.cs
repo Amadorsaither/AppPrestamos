@@ -53,7 +53,7 @@ namespace AppPrestamos.ViewModels
             CuotasPendientes.Clear();
             Cuota? seleccionada = null;
             foreach (var c in db.Cuotas.Include("Prestamo.Cliente")
-                         .Where(c => c.Estado == EstadoCuota.Pendiente || c.Estado == EstadoCuota.Vencida)
+                         .Where(c => c.Estado == EstadoCuota.Pendiente || c.Estado == EstadoCuota.Vencida || c.Estado == EstadoCuota.Parcial)
                          .OrderBy(c => c.FechaVencimiento))
             {
                 CuotasPendientes.Add(c);
