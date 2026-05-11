@@ -15,6 +15,7 @@ namespace AppPrestamos.ViewModels
 {
     public partial class DashboardViewModel : ObservableObject
     {
+        private static readonly HashSet<string> NotificacionesVistas = new();
         [ObservableProperty]
         private string totalClientes = "0";
 
@@ -70,6 +71,9 @@ namespace AppPrestamos.ViewModels
         [RelayCommand]
         private void NotificacionClick(NotificacionItem item)
         {
+            if (!string.IsNullOrEmpty(item.ItemKey))
+                NotificacionesVistas.Add(item.ItemKey);
+
             Notificaciones.Remove(item);
             NotificacionesCount = Notificaciones.Count;
             IsNotificacionesOpen = false;
@@ -245,8 +249,11 @@ namespace AppPrestamos.ViewModels
 
             foreach (var p in nuevosPrestamos)
             {
+                var key = $"prestamo-{p.Id}";
+                if (NotificacionesVistas.Contains(key)) continue;
                 Notificaciones.Add(new NotificacionItem
                 {
+                    ItemKey = key,
                     Titulo = $"Nuevo préstamo - {p.Cliente?.Nombre ?? ""}",
                     Mensaje = $"${p.Monto:N2} — {p.NumeroCuotas} cuotas",
                     Tipo = "info",
@@ -263,9 +270,12 @@ namespace AppPrestamos.ViewModels
 
             foreach (var c in vencidasHoy)
             {
+                var key = $"cuota-{c.Id}";
+                if (NotificacionesVistas.Contains(key)) continue;
                 var diasVencida = (hoy - c.FechaVencimiento).Days;
                 Notificaciones.Add(new NotificacionItem
                 {
+                    ItemKey = key,
                     Titulo = $"Cuota vencida - {c.Prestamo?.Cliente?.Nombre ?? ""}",
                     Mensaje = $"Cuota #{c.NumeroCuota} — ${c.SaldoPendiente:N2} — {diasVencida} días de atraso",
                     Tipo = "alerta",
@@ -282,8 +292,11 @@ namespace AppPrestamos.ViewModels
 
             foreach (var c in proximas3)
             {
+                var key = $"cuota-{c.Id}";
+                if (NotificacionesVistas.Contains(key)) continue;
                 Notificaciones.Add(new NotificacionItem
                 {
+                    ItemKey = key,
                     Titulo = $"Próximo vencimiento - {c.Prestamo?.Cliente?.Nombre ?? ""}",
                     Mensaje = $"Cuota #{c.NumeroCuota} — ${c.SaldoPendiente:N2} — Vence {c.FechaVencimiento:dd/MM/yyyy}",
                     Tipo = "info",
@@ -337,6 +350,7 @@ namespace AppPrestamos.ViewModels
 
     public class NotificacionItem
     {
+        public string ItemKey { get; set; } = "";
         public string Titulo { get; set; } = "";
         public string Mensaje { get; set; } = "";
         public string Tipo { get; set; } = "info";
