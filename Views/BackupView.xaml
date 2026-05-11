@@ -1,0 +1,69 @@
+<UserControl x:Class="AppPrestamos.Views.BackupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F3F6FB">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" BorderThickness="0">
+        <StackPanel Margin="20,25,20,30">
+
+            <TextBlock Text="Respaldo y Restauración" FontSize="30" FontWeight="Bold" Foreground="#0F172A"
+                       Margin="0,0,0,5"/>
+            <TextBlock Text="Administración de copias de seguridad" FontSize="13" Foreground="#475569"
+                       Margin="0,0,0,25"/>
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="White" CornerRadius="12" Margin="4" Padding="25"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <Border Width="48" Height="48" CornerRadius="24" Background="#EFF6FF" Margin="0,0,0,12">
+                            <TextBlock Text="⬇" FontSize="20" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Crear Respaldo" FontSize="16" FontWeight="SemiBold" Foreground="#0F172A"/>
+                        <TextBlock Text="Descargue una copia de la base de datos actual." FontSize="12"
+                                   Foreground="#475569" Margin="0,4,0,15"/>
+                        <TextBlock Text="Tamaño actual de la BD:" FontSize="11" Foreground="#64748B"/>
+                        <TextBlock Text="{Binding TamanoActual}" FontSize="14" FontWeight="Bold" Foreground="#0F172A"
+                                   Margin="0,2,0,15"/>
+                        <Button Command="{Binding CrearBackupCommand}"
+                                Height="40" Background="#3B82F6" Foreground="White"
+                                FontSize="14" FontWeight="SemiBold"
+                                BorderThickness="0" Cursor="Hand"
+                                Content="Crear Respaldo"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Background="White" CornerRadius="12" Margin="4" Padding="25"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <Border Width="48" Height="48" CornerRadius="24" Background="#FEF2F2" Margin="0,0,0,12">
+                            <TextBlock Text="⬆" FontSize="20" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Restaurar Respaldo" FontSize="16" FontWeight="SemiBold" Foreground="#0F172A"/>
+                        <TextBlock Text="Reemplace la base de datos actual con un respaldo." FontSize="12"
+                                   Foreground="#475569" Margin="0,4,0,15"/>
+                        <TextBlock Text="⚠ Esta acción sobrescribirá todos los datos." FontSize="11" Foreground="#EF4444"
+                                   Margin="0,0,0,15"/>
+                        <Button Command="{Binding RestaurarCommand}"
+                                Height="40" Background="#EF4444" Foreground="White"
+                                FontSize="14" FontWeight="SemiBold"
+                                BorderThickness="0" Cursor="Hand"
+                                Content="Restaurar Respaldo"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Background="White" CornerRadius="12" Margin="4" Padding="20"
+                    Visibility="{Binding HayMensaje, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Effect="{StaticResource SombraTarjeta}">
+                <TextBlock Text="{Binding Mensaje}" FontSize="13" Foreground="#0F172A"/>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

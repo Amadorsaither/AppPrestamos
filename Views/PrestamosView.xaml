@@ -1,0 +1,163 @@
+<UserControl x:Class="AppPrestamos.Views.PrestamosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F3F6FB">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" BorderThickness="0">
+        <StackPanel Margin="20">
+
+            <TextBlock Text="Gestión de Préstamos"
+                       FontSize="30" FontWeight="Bold" Foreground="#0F172A"
+                       Margin="0,0,0,20"/>
+
+            <Border Background="White" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+                <StackPanel>
+                    <Border Background="#FEF2F2" CornerRadius="8" Padding="10" Margin="0,0,0,10"
+                            BorderBrush="#FECACA" BorderThickness="1">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding TieneError}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding ErrorFormulario}" Foreground="#DC2626" FontSize="12"/>
+                    </Border>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
+                            <TextBlock Text="Cliente *" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding Clientes}"
+                                      SelectedItem="{Binding ClienteSeleccionado}"
+                                      DisplayMemberPath="Nombre"
+                                      Height="35" Margin="0,0,5,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="5">
+                            <TextBlock Text="Monto *" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding Monto, ValidatesOnNotifyDataErrors=True, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Height="35"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="5">
+                            <TextBlock Text="Tasa de Interés (%)" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding TasaInteres, ValidatesOnNotifyDataErrors=True, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Height="35"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="5">
+                            <TextBlock Text="Tipo de Interés" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding TipoInteresValues}"
+                                      SelectedItem="{Binding TipoInteres}" Height="35"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5">
+                            <TextBlock Text="Frecuencia de Pago" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding FrecuenciaPagoValues}"
+                                      SelectedItem="{Binding FrecuenciaPago}" Height="35"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="2" Margin="5">
+                            <TextBlock Text="Número de Cuotas *" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding NumeroCuotas, ValidatesOnNotifyDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Height="35"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="5">
+                            <TextBlock Text="Fecha de Inicio" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <DatePicker SelectedDate="{Binding FechaInicio}" Height="35"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="5">
+                            <TextBlock Text="Tasa de Mora Diaria (%)" Foreground="#334155" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding TasaMoraDiaria, ValidatesOnNotifyDataErrors=True, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" Height="35"/>
+                        </StackPanel>
+
+                        <Button Grid.Row="3" Grid.Column="0"
+                                Content="Crear Préstamo"
+                                Command="{Binding CrearPrestamoCommand}"
+                                Background="#3B82F6" Foreground="White"
+                                Height="40" Width="160" Margin="5,10,5,0"
+                                FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Background="White" CornerRadius="12" Padding="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Lista de Préstamos" FontSize="18" FontWeight="SemiBold"
+                               Foreground="#0F172A" Margin="0,0,0,10"/>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Ver Cuotas"
+                                Command="{Binding VerCuotasCommand}"
+                                Background="#8B5CF6" Foreground="White"
+                                Height="32" Width="100" Margin="0,0,5,0"
+                                FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                        <Button Content="Cancelar"
+                                Command="{Binding CancelarPrestamoCommand}"
+                                Background="#F59E0B" Foreground="White"
+                                Height="32" Width="100" Margin="0,0,5,0"
+                                FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                        <Button Content="Eliminar"
+                                Command="{Binding EliminarPrestamoCommand}"
+                                Background="#EF4444" Foreground="White"
+                                Height="32" Width="100"
+                                FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="2" ItemsSource="{Binding Prestamos}"
+                              SelectedItem="{Binding PrestamoSeleccionado}"
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              BorderThickness="0" Background="Transparent"
+                              HeadersVisibility="Column" RowHeaderWidth="0"
+                              GridLinesVisibility="None" FontSize="13" RowHeight="38" SelectionChanged="DataGrid_SelectionChanged">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#F8FAFC"/>
+                                <Setter Property="Foreground" Value="#334155"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="FontSize" Value="11"/>
+                                <Setter Property="Height" Value="36"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#0F172A"/>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="CLIENTE" Binding="{Binding Cliente.Nombre}" Width="*"/>
+                            <DataGridTextColumn Header="MONTO" Binding="{Binding Monto, StringFormat=N2}" Width="100"/>
+                            <DataGridTextColumn Header="CUOTAS" Binding="{Binding NumeroCuotas}" Width="60"/>
+                            <DataGridTextColumn Header="INTERÉS" Binding="{Binding TasaInteres, StringFormat={}N2%}" Width="70"/>
+                            <DataGridTextColumn Header="FRECUENCIA" Binding="{Binding FrecuenciaPago}" Width="90"/>
+                            <DataGridTextColumn Header="ESTADO" Binding="{Binding Estado}" Width="80"/>
+                            <DataGridTextColumn Header="INICIO" Binding="{Binding FechaInicio, StringFormat=dd/MM/yyyy}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

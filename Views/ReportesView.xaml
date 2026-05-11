@@ -1,0 +1,246 @@
+<UserControl x:Class="AppPrestamos.Views.ReportesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:vm="clr-namespace:AppPrestamos.ViewModels"
+             Background="#F3F6FB">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" BorderThickness="0">
+        <StackPanel Margin="20,25,20,30">
+
+            <Grid Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Reportes y Estadísticas"
+                               FontSize="30" FontWeight="Bold" Foreground="#0F172A"/>
+                    <TextBlock Text="Informes detallados del sistema"
+                               FontSize="13" Foreground="#475569"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                    <Border CornerRadius="8" Background="#EF4444">
+                        <Button Command="{Binding ExportarPdfCommand}"
+                                Foreground="White"
+                                FontSize="13" FontWeight="SemiBold"
+                                Padding="14,8" Cursor="Hand"
+                                BorderThickness="0" Background="Transparent">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📄 " FontSize="14" Margin="0,0,4,0"/>
+                                <TextBlock Text="Exportar PDF"/>
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                    <Border CornerRadius="8" Background="#10B981" Margin="8,0,0,0">
+                        <Button Command="{Binding ExportarExcelCommand}"
+                                Foreground="White"
+                                FontSize="13" FontWeight="SemiBold"
+                                Padding="14,8" Cursor="Hand"
+                                BorderThickness="0" Background="Transparent">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📊 " FontSize="14" Margin="0,0,4,0"/>
+                                <TextBlock Text="Exportar Excel"/>
+                            </StackPanel>
+                        </Button>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="White" CornerRadius="12" Margin="4" Padding="15"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Clientes" FontSize="11" Foreground="#475569"/>
+                        <TextBlock Text="{Binding TotalClientes}" FontSize="22" FontWeight="Bold" Foreground="#0F172A"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Background="White" CornerRadius="12" Margin="4" Padding="15"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Préstamos" FontSize="11" Foreground="#475569"/>
+                        <TextBlock Text="{Binding TotalPrestamos}" FontSize="22" FontWeight="Bold" Foreground="#0F172A"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Background="White" CornerRadius="12" Margin="4" Padding="15"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Desembolsado" FontSize="11" Foreground="#475569"/>
+                        <TextBlock Text="{Binding MontoDesembolsado}" FontSize="22" FontWeight="Bold" Foreground="#3B82F6"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Background="White" CornerRadius="12" Margin="4" Padding="15"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Cobrado" FontSize="11" Foreground="#475569"/>
+                        <TextBlock Text="{Binding MontoCobrado}" FontSize="22" FontWeight="Bold" Foreground="#10B981"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="4" Background="White" CornerRadius="12" Margin="4" Padding="15"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Pendiente" FontSize="11" Foreground="#475569"/>
+                        <TextBlock Text="{Binding SaldoPendiente}" FontSize="22" FontWeight="Bold" Foreground="#F59E0B"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="5" Background="White" CornerRadius="12" Margin="4" Padding="15"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Cuotas Vencidas" FontSize="11" Foreground="#475569"/>
+                        <TextBlock Text="{Binding ClientesEnMora}" FontSize="22" FontWeight="Bold" Foreground="#EF4444"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="1.8*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="White" CornerRadius="12" Margin="4" Padding="20"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Estado de Préstamos" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="#0F172A" Margin="0,0,0,5"/>
+                        <TextBlock Text="Distribución general" FontSize="11" Foreground="#475569" Margin="0,0,0,10"/>
+                        <lvc:PieChart Series="{Binding SeriesEstadoPrestamos}"
+                                      Height="220" TooltipPosition="Hidden" Margin="0,0,0,10"/>
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                <Border Width="10" Height="10" CornerRadius="3" Background="#10B981" Margin="0,0,0,3"/>
+                                <TextBlock Text="Activos" FontSize="11" Foreground="#334155"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <Border Width="10" Height="10" CornerRadius="3" Background="#3B82F6" Margin="0,0,0,3"/>
+                                <TextBlock Text="Pagados" FontSize="11" Foreground="#334155"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                                <Border Width="10" Height="10" CornerRadius="3" Background="#EF4444" Margin="0,0,0,3"/>
+                                <TextBlock Text="En Mora" FontSize="11" Foreground="#334155"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Background="White" CornerRadius="12" Margin="4" Padding="20"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Ingresos Mensuales" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="#0F172A" Margin="0,0,0,5"/>
+                        <TextBlock Text="Últimos 12 meses" FontSize="11" Foreground="#475569" Margin="0,0,0,10"/>
+                        <lvc:CartesianChart Series="{Binding SeriesIngresosMensuales}"
+                                            XAxes="{Binding EjesIngresosX}"
+                                            YAxes="{Binding EjesIngresosY}"
+                                            Height="240" TooltipPosition="Hidden" ZoomMode="None"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="White" CornerRadius="12" Margin="4" Padding="20"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Clientes en Mora" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="#0F172A" Margin="0,0,0,10"/>
+                        <DataGrid ItemsSource="{Binding ClientesMora}"
+                                  AutoGenerateColumns="False" BorderThickness="0"
+                                  Background="Transparent" HeadersVisibility="Column"
+                                  RowHeaderWidth="0" GridLinesVisibility="None"
+                                  IsReadOnly="True" Height="280" RowHeight="36" FontSize="12">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#F8FAFC"/>
+                                    <Setter Property="Foreground" Value="#334155"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="11"/>
+                                    <Setter Property="Height" Value="32"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="#0F172A"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="CLIENTE" Binding="{Binding Cliente}" Width="*"/>
+                                <DataGridTextColumn Header="PRÉSTAMO" Binding="{Binding PrestamoId}" Width="70"/>
+                                <DataGridTextColumn Header="CUOTA" Binding="{Binding CuotaNumero}" Width="60"/>
+                                <DataGridTextColumn Header="MONTO" Binding="{Binding Monto, StringFormat=N2}" Width="90"/>
+                                <DataGridTextColumn Header="VENCE" Binding="{Binding Vencimiento}" Width="90"/>
+                                <DataGridTemplateColumn Header="DÍAS" Width="70">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DiasVencido}" FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center">
+                                                <TextBlock.Foreground>
+                                                    <SolidColorBrush Color="{Binding ColorDias}"/>
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Background="White" CornerRadius="12" Margin="4" Padding="20"
+                        Effect="{StaticResource SombraTarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Resumen Mensual" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="#0F172A" Margin="0,0,0,10"/>
+                        <DataGrid ItemsSource="{Binding ResumenAnual}"
+                                  AutoGenerateColumns="False" BorderThickness="0"
+                                  Background="Transparent" HeadersVisibility="Column"
+                                  RowHeaderWidth="0" GridLinesVisibility="None"
+                                  IsReadOnly="True" Height="280" RowHeight="36" FontSize="12">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#F8FAFC"/>
+                                    <Setter Property="Foreground" Value="#334155"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="11"/>
+                                    <Setter Property="Height" Value="32"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="#0F172A"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="MES" Binding="{Binding Mes}" Width="*"/>
+                                <DataGridTextColumn Header="PRÉSTAMOS" Binding="{Binding Prestamos}" Width="100"/>
+                                <DataGridTextColumn Header="COBRADO" Binding="{Binding Cobrado, StringFormat=N2}" Width="120"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
