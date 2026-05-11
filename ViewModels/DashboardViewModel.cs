@@ -304,6 +304,46 @@ namespace AppPrestamos.ViewModels
                 });
             }
 
+            var pagosHoy = db.Pagos.Include(p => p.Cuota.Prestamo.Cliente)
+                .Where(p => p.FechaPago.Date == hoy)
+                .OrderByDescending(p => p.Id)
+                .Take(5)
+                .ToList();
+
+            foreach (var p in pagosHoy)
+            {
+                var key = $"pago-{p.Id}";
+                if (NotificacionesVistas.Contains(key)) continue;
+                Notificaciones.Add(new NotificacionItem
+                {
+                    ItemKey = key,
+                    Titulo = $"Pago registrado - {p.Cuota?.Prestamo?.Cliente?.Nombre ?? ""}",
+                    Mensaje = $"${p.MontoPagado:N2} — Cuota #{p.Cuota?.NumeroCuota}",
+                    Tipo = "info",
+                    Seccion = "Pagos"
+                });
+            }
+
+            var nuevosClientes = db.Clientes
+                .Where(c => c.FechaRegistro.Date == hoy)
+                .OrderByDescending(c => c.Id)
+                .Take(3)
+                .ToList();
+
+            foreach (var c in nuevosClientes)
+            {
+                var key = $"cliente-{c.Id}";
+                if (NotificacionesVistas.Contains(key)) continue;
+                Notificaciones.Add(new NotificacionItem
+                {
+                    ItemKey = key,
+                    Titulo = $"Nuevo cliente - {c.Nombre}",
+                    Mensaje = $"Cédula: {c.Cedula}",
+                    Tipo = "info",
+                    Seccion = "Clientes"
+                });
+            }
+
             NotificacionesCount = Notificaciones.Count;
 
             OnPropertyChanged(nameof(SeriesEstados));
