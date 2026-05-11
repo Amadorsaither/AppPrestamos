@@ -37,22 +37,31 @@ namespace AppPrestamos.ViewModels
 
         public bool TieneError => !string.IsNullOrEmpty(ErrorFormulario);
 
-        public PagosViewModel()
+        public PagosViewModel() : this(null) { }
+
+        public PagosViewModel(int? cuotaId)
         {
-            CargarCuotasPendientes();
+            CargarCuotasPendientes(cuotaId);
             CargarPagos();
         }
 
         partial void OnErrorFormularioChanged(string value) => OnPropertyChanged(nameof(TieneError));
 
-        private void CargarCuotasPendientes()
+        private void CargarCuotasPendientes(int? seleccionarId = null)
         {
             using var db = new AppDbContext();
             CuotasPendientes.Clear();
+            Cuota? seleccionada = null;
             foreach (var c in db.Cuotas.Include("Prestamo.Cliente")
                          .Where(c => c.Estado == EstadoCuota.Pendiente || c.Estado == EstadoCuota.Vencida)
                          .OrderBy(c => c.FechaVencimiento))
+            {
                 CuotasPendientes.Add(c);
+                if (seleccionarId.HasValue && c.Id == seleccionarId.Value)
+                    seleccionada = c;
+            }
+            if (seleccionada is not null)
+                CuotaSeleccionada = seleccionada;
         }
 
         private void CargarPagos()

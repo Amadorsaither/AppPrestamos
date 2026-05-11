@@ -44,6 +44,12 @@ namespace AppPrestamos.ViewModels
                     case "Profile": NavigateToProfile(); break;
                 }
             });
+
+            WeakReferenceMessenger.Default.Register<NavigateToPagoConCuotaMessage>(this, (r, m) =>
+            {
+                SelectedSection = "Pagos";
+                CurrentViewModel = new PagosViewModel(m.CuotaId);
+            });
         }
 
         private void CerrarSesion()
@@ -134,5 +140,11 @@ namespace AppPrestamos.ViewModels
     {
         public string ViewName { get; }
         public NavigationMessage(string viewName) => ViewName = viewName;
+    }
+
+    public class NavigateToPagoConCuotaMessage
+    {
+        public int CuotaId { get; }
+        public NavigateToPagoConCuotaMessage(int cuotaId) => CuotaId = cuotaId;
     }
 }

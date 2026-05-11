@@ -51,6 +51,22 @@ namespace AppPrestamos.ViewModels
         [ObservableProperty]
         private int notificacionesCount;
 
+        [ObservableProperty]
+        private bool isNotificacionesOpen;
+
+        public bool TieneNotificaciones => NotificacionesCount > 0;
+
+        partial void OnNotificacionesCountChanged(int value)
+        {
+            OnPropertyChanged(nameof(TieneNotificaciones));
+        }
+
+        [RelayCommand]
+        private void ToggleNotificaciones()
+        {
+            IsNotificacionesOpen = !IsNotificacionesOpen;
+        }
+
         public ISeries[] SeriesEstados { get; private set; } = [];
 
         public ObservableCollection<ProximoVencimiento> Vencimientos { get; } = [];
@@ -72,6 +88,12 @@ namespace AppPrestamos.ViewModels
         [RelayCommand]
         private void ReporteMora() =>
             WeakReferenceMessenger.Default.Send(new NavigationMessage("Reportes"));
+
+        [RelayCommand]
+        private void IrAPago(ProximoVencimiento vencimiento)
+        {
+            WeakReferenceMessenger.Default.Send(new NavigateToPagoConCuotaMessage(vencimiento.CuotaId));
+        }
 
         public DashboardViewModel()
         {
@@ -166,6 +188,7 @@ namespace AppPrestamos.ViewModels
 
                 Vencimientos.Add(new ProximoVencimiento
                 {
+                    CuotaId = c.Id,
                     Cliente = c.Prestamo?.Cliente?.Nombre ?? "",
                     Monto = $"${c.SaldoPendiente:N2}",
                     Fecha = c.FechaVencimiento.ToString("dd/MM/yyyy"),
@@ -246,6 +269,7 @@ namespace AppPrestamos.ViewModels
 
     public class ProximoVencimiento
     {
+        public int CuotaId { get; set; }
         public string Cliente { get; set; } = "";
         public string Monto { get; set; } = "";
         public string Fecha { get; set; } = "";

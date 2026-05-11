@@ -46,7 +46,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock>
-                                        <Run Text="Préstamo #"/><Run Text="{Binding PrestamoId}"/>
+                                        <Run Text="{Binding Prestamo.Cliente.Nombre}"/>
                                         <Run Text=" - Cuota #"/><Run Text="{Binding NumeroCuota}"/>
                                         <Run Text=" - $"/><Run Text="{Binding SaldoPendiente, StringFormat=N2}"/>
                                     </TextBlock>
