@@ -53,9 +53,29 @@
                         Background="White" Padding="12,10" Margin="0,0,0,14">
                     <StackPanel>
                         <TextBlock Text="Contraseña" FontSize="11" Foreground="#334155" Margin="0,0,0,4"/>
-                        <PasswordBox x:Name="TxtContrasena"
+                        <Grid>
+                            <PasswordBox x:Name="TxtContrasena"
+                                         FontSize="14" BorderThickness="0" Background="Transparent"
+                                         Foreground="#0F172A" Padding="0,0,24,0"/>
+                            <TextBox x:Name="TxtContrasenaVisible"
+                                     Text="{Binding Contrasena, UpdateSourceTrigger=PropertyChanged}"
                                      FontSize="14" BorderThickness="0" Background="Transparent"
-                                     Foreground="#0F172A" Padding="0"/>
+                                     Foreground="#0F172A" Padding="0,0,24,0"
+                                     Visibility="Collapsed"/>
+                            <Button x:Name="BtnTogglePass" Width="22" Height="22"
+                                    Background="Transparent" BorderThickness="0"
+                                    Cursor="Hand" Click="BtnTogglePass_Click"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <Viewbox Width="16" Height="16">
+                                    <Canvas Width="24" Height="24">
+                                        <Path x:Name="IconEye" Data="M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z M12,17C9.24,17 7,14.76 7,12C7,9.24 9.24,7 12,7C14.76,7 17,9.24 17,12C17,14.76 14.76,17 12,17Z M12,9C10.34,9 9,10.34 9,12C9,13.66 10.34,15 12,15C13.66,15 15,13.66 15,12C15,10.34 13.66,9 12,9Z"
+                                              Fill="#475569" Stretch="Uniform"/>
+                                        <Path x:Name="IconEyeOff" Data="M2,2L22,22M10.41,10.41C9.46,10.97 8.72,11.85 8.35,12.88C8.24,13.17 8.17,13.47 8.14,13.78C8.08,14.5 8.18,15.18 8.45,15.8M22,12C20.27,16.39 16,19.5 11,19.5C9.87,19.5 8.78,19.34 7.74,19.02M15.12,15.12C14.07,16.17 12.59,16.83 11,16.83C10.12,16.83 9.28,16.6 8.55,16.2M19.9,4.1L17.77,6.23C16.23,4.95 14.23,4.14 12,4.14C7,4.14 2.73,7.26 1,12C1.97,14.47 3.82,16.5 6.14,17.83L4.08,19.9"
+                                              Fill="#475569" Stretch="Uniform" Visibility="Collapsed"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
                     </StackPanel>
                 </Border>
 

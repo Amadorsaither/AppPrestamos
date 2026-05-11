@@ -564,26 +564,47 @@
 
                 <StackPanel Grid.Row="2" Margin="14,0,14,16">
                     <Separator BorderBrush="#334155" Margin="0,0,0,10"/>
-                    <Border CornerRadius="8" Background="#1E293B" Padding="10,8">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Width="32" Height="32" CornerRadius="16"
-                                    Background="#3B82F6" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding UsuarioInicial}" FontSize="13" FontWeight="Bold"
-                                           Foreground="White" HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                            </Border>
-                            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding UsuarioNombre}" FontSize="12" FontWeight="SemiBold"
-                                           Foreground="White"/>
-                                <TextBlock Text="{Binding UsuarioRol}" FontSize="10"
-                                           Foreground="#475569"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    <Button Background="Transparent" BorderThickness="0"
+                            Command="{Binding NavigateToProfileCommand}" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border CornerRadius="8" Padding="10,8"
+                                        Background="#1E293B">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1E293B"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedSection}" Value="Profile">
+                                                    <Setter Property="Background" Value="#3B82F6"/>
+                                                </DataTrigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#334155"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Width="32" Height="32" CornerRadius="16"
+                                                Background="#3B82F6" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding UsuarioInicial}" FontSize="13"
+                                                       FontWeight="Bold" Foreground="White"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding UsuarioNombre}" FontSize="12"
+                                                       FontWeight="SemiBold" Foreground="White"/>
+                                            <TextBlock Text="{Binding UsuarioRol}" FontSize="10"
+                                                       Foreground="#475569"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                     <Button Command="{Binding CerrarSesionCommand}"
                             Background="Transparent" BorderThickness="0"
                             Foreground="#475569" FontSize="11" Cursor="Hand"

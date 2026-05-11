@@ -92,5 +92,8 @@
         <DataTemplate DataType="{x:Type vm:CalendarioViewModel}">
             <v:CalendarioView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ProfileViewModel}">
+            <v:ProfileView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

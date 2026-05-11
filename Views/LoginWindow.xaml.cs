@@ -25,5 +25,27 @@ namespace AppPrestamos.Views
             ViewModel.Contrasena = TxtContrasena.Password;
             ViewModel.IniciarSesionCommand.Execute(null);
         }
+
+        private void BtnTogglePass_Click(object sender, RoutedEventArgs e)
+        {
+            if (TxtContrasena.Visibility == Visibility.Visible)
+            {
+                TxtContrasenaVisible.Text = TxtContrasena.Password;
+                TxtContrasena.Visibility = Visibility.Collapsed;
+                TxtContrasenaVisible.Visibility = Visibility.Visible;
+                TxtContrasenaVisible.Focus();
+                IconEye.Visibility = Visibility.Collapsed;
+                IconEyeOff.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                TxtContrasena.Password = TxtContrasenaVisible.Text;
+                TxtContrasena.Visibility = Visibility.Visible;
+                TxtContrasenaVisible.Visibility = Visibility.Collapsed;
+                TxtContrasena.Focus();
+                IconEye.Visibility = Visibility.Visible;
+                IconEyeOff.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

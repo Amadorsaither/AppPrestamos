@@ -41,6 +41,7 @@ namespace AppPrestamos.ViewModels
                     case "Auditoria": NavigateToAuditoria(); break;
                     case "Simulador": NavigateToSimulador(); break;
                     case "Calendario": NavigateToCalendario(); break;
+                    case "Profile": NavigateToProfile(); break;
                 }
             });
         }
@@ -119,6 +120,13 @@ namespace AppPrestamos.ViewModels
         {
             SelectedSection = "Calendario";
             CurrentViewModel = new CalendarioViewModel();
+        }
+
+        [RelayCommand]
+        private void NavigateToProfile()
+        {
+            SelectedSection = "Profile";
+            CurrentViewModel = new ProfileViewModel();
         }
     }
 
