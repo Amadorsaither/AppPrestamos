@@ -22,25 +22,16 @@ namespace AppPrestamos.ViewModels
         private string subtituloClientes = "Clientes Registrados";
 
         [ObservableProperty]
-        private string incrementoClientes = "";
-
-        [ObservableProperty]
         private string totalPrestamos = "0";
 
         [ObservableProperty]
         private string subtituloPrestamos = "Pr\u00e9stamos Activos";
 
         [ObservableProperty]
-        private string incrementoPrestamos = "";
-
-        [ObservableProperty]
         private string totalMonto = "$0";
 
         [ObservableProperty]
         private string subtituloMonto = "Monto Total Prestado";
-
-        [ObservableProperty]
-        private string incrementoMonto = "";
 
         [ObservableProperty]
         private string totalPagos = "$0";
@@ -58,25 +49,13 @@ namespace AppPrestamos.ViewModels
         private int moraCount;
 
         [ObservableProperty]
-        private string incrementoPagos = "";
-
-        public ISeries[] SparklineClientes { get; private set; } = [];
-        public ISeries[] SparklinePrestamos { get; private set; } = [];
-        public ISeries[] SparklineMonto { get; private set; } = [];
-        public ISeries[] SparklinePagos { get; private set; } = [];
-        public Axis[] EjeVacio { get; } =
-        [
-            new() { IsVisible = false, LabelsPaint = null, SeparatorsPaint = null },
-            new() { IsVisible = false, LabelsPaint = null, SeparatorsPaint = null }
-        ];
+        private int notificacionesCount;
 
         public ISeries[] SeriesEstados { get; private set; } = [];
-        public ISeries[] SeriesFrecuencia { get; private set; } = [];
-        public Axis[] EjesFrecuenciaX { get; private set; } = [];
-        public Axis[] EjesFrecuenciaY { get; private set; } = [];
 
         public ObservableCollection<ProximoVencimiento> Vencimientos { get; } = [];
         public ObservableCollection<PrestamoReciente> PrestamosRecientes { get; } = [];
+        public ObservableCollection<NotificacionItem> Notificaciones { get; } = [];
 
         [RelayCommand]
         private void NuevoCliente() =>
@@ -105,15 +84,15 @@ namespace AppPrestamos.ViewModels
 
             var totalClientesDb = db.Clientes.Count();
             TotalClientes = totalClientesDb.ToString("N0");
-            IncrementoClientes = $"{totalClientesDb} registrados";
+            SubtituloClientes = "Clientes Registrados";
 
             var prestamosActivos = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.Activo);
             TotalPrestamos = prestamosActivos.ToString("N0");
-            IncrementoPrestamos = $"{prestamosActivos} en curso";
+            SubtituloPrestamos = $"{prestamosActivos} en curso";
 
             var montoTotal = db.Prestamos.AsEnumerable().Sum(p => p.Monto);
             TotalMonto = $"${montoTotal:N2}";
-            IncrementoMonto = $"${montoTotal:N0} desembolsados";
+            SubtituloMonto = $"${montoTotal:N0} desembolsados";
 
             var hoy = DateTime.Today;
             var pagosMes = db.Pagos
@@ -121,26 +100,19 @@ namespace AppPrestamos.ViewModels
                 .AsEnumerable()
                 .Sum(p => p.MontoPagado);
             TotalPagos = $"${pagosMes:N2}";
-            IncrementoPagos = $"${pagosMes:N0} recaudados";
+            SubtituloPagos = $"{pagosMes:N0} recaudados";
 
-            var azul = SKColor.Parse("#3B82F6");
+            var activos = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.Activo);
+            var pagados = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.Pagado);
+            var mora = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.EnMora);
+
+            ActivosCount = activos;
+            PagadosCount = pagados;
+            MoraCount = mora;
+
             var verde = SKColor.Parse("#10B981");
-            var naranja = SKColor.Parse("#F59E0B");
-            var morado = SKColor.Parse("#8B5CF6");
+            var azul = SKColor.Parse("#3B82F6");
             var rojo = SKColor.Parse("#EF4444");
-
-            SparklineClientes = CrearSparkline(ObtenerTendenciaClientes(db), azul);
-            SparklinePrestamos = CrearSparkline(ObtenerTendenciaPrestamos(db), verde);
-            SparklineMonto = CrearSparkline(ObtenerTendenciaMonto(db), naranja);
-            SparklinePagos = CrearSparkline(ObtenerTendenciaPagos(db), morado);
-
-            ActivosCount = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.Activo);
-            PagadosCount = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.Pagado);
-            MoraCount = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.EnMora);
-
-            var activos = ActivosCount;
-            var pagados = PagadosCount;
-            var mora = MoraCount;
 
             SeriesEstados = new ISeries[]
             {
@@ -156,25 +128,6 @@ namespace AppPrestamos.ViewModels
                     InnerRadius = 60,
                     DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
                     DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 }
-            };
-
-            var semanal = db.Prestamos.Count(p => p.FrecuenciaPago == FrecuenciaPago.Semanal);
-            var quincenal = db.Prestamos.Count(p => p.FrecuenciaPago == FrecuenciaPago.Quincenal);
-            var mensual = db.Prestamos.Count(p => p.FrecuenciaPago == FrecuenciaPago.Mensual);
-
-            SeriesFrecuencia = new ISeries[]
-            {
-                new ColumnSeries<double> { Values = [semanal, quincenal, mensual],
-                    Fill = new SolidColorPaint(azul), Stroke = null, MaxBarWidth = 50 }
-            };
-            EjesFrecuenciaX = new Axis[]
-            {
-                new() { Labels = new[] { "Semanal", "Quincenal", "Mensual" },
-                    LabelsRotation = 0, LabelsPaint = new SolidColorPaint(SKColor.Parse("#334155")), TextSize = 12 }
-            };
-            EjesFrecuenciaY = new Axis[]
-            {
-                new() { LabelsPaint = null, SeparatorsPaint = new SolidColorPaint(SKColor.Parse("#E2E8F0"), 1) }
             };
 
             Vencimientos.Clear();
@@ -248,91 +201,46 @@ namespace AppPrestamos.ViewModels
                 });
             }
 
-            OnPropertyChanged(nameof(TotalClientes));
-            OnPropertyChanged(nameof(TotalPrestamos));
-            OnPropertyChanged(nameof(TotalMonto));
-            OnPropertyChanged(nameof(TotalPagos));
-            OnPropertyChanged(nameof(SparklineClientes));
-            OnPropertyChanged(nameof(SparklinePrestamos));
-            OnPropertyChanged(nameof(SparklineMonto));
-            OnPropertyChanged(nameof(SparklinePagos));
-            OnPropertyChanged(nameof(SeriesEstados));
-            OnPropertyChanged(nameof(SeriesFrecuencia));
-            OnPropertyChanged(nameof(EjesFrecuenciaX));
-            OnPropertyChanged(nameof(EjesFrecuenciaY));
-        }
+            Notificaciones.Clear();
+            var vencidasHoy = db.Cuotas
+                .Include(c => c.Prestamo).ThenInclude(p => p.Cliente)
+                .Where(c => c.Estado == EstadoCuota.Vencida || (c.Estado == EstadoCuota.Pendiente && c.FechaVencimiento <= hoy))
+                .OrderBy(c => c.FechaVencimiento)
+                .Take(5)
+                .ToList();
 
-        private static double[] ObtenerTendenciaClientes(AppDbContext db)
-        {
-            var hoy = DateTime.Today;
-            var resultado = new double[6];
-            for (int i = 5; i >= 0; i--)
+            foreach (var c in vencidasHoy)
             {
-                var inicio = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(-i);
-                var fin = inicio.AddMonths(1);
-                resultado[5 - i] = db.Clientes.Count(c => c.FechaRegistro < fin);
-            }
-            return resultado;
-        }
-
-        private static double[] ObtenerTendenciaPrestamos(AppDbContext db)
-        {
-            var hoy = DateTime.Today;
-            var resultado = new double[6];
-            for (int i = 5; i >= 0; i--)
-            {
-                var inicio = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(-i);
-                var fin = inicio.AddMonths(1);
-                resultado[5 - i] = db.Prestamos.Count(p => p.FechaInicio < fin);
-            }
-            return resultado;
-        }
-
-        private static double[] ObtenerTendenciaMonto(AppDbContext db)
-        {
-            var hoy = DateTime.Today;
-            var resultado = new double[6];
-            for (int i = 5; i >= 0; i--)
-            {
-                var inicio = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(-i);
-                var fin = inicio.AddMonths(1);
-                resultado[5 - i] = (double)db.Prestamos
-                    .Where(p => p.FechaInicio < fin)
-                    .AsEnumerable()
-                    .Sum(p => p.Monto);
-            }
-            return resultado;
-        }
-
-        private static double[] ObtenerTendenciaPagos(AppDbContext db)
-        {
-            var hoy = DateTime.Today;
-            var resultado = new double[6];
-            for (int i = 5; i >= 0; i--)
-            {
-                var inicio = new DateTime(hoy.Year, hoy.Month, 1).AddMonths(-i);
-                var fin = inicio.AddMonths(1);
-                resultado[5 - i] = (double)db.Pagos
-                    .Where(p => p.FechaPago >= inicio && p.FechaPago < fin)
-                    .AsEnumerable()
-                    .Sum(p => p.MontoPagado);
-            }
-            return resultado;
-        }
-
-        private static ISeries[] CrearSparkline(double[] valores, SKColor color)
-        {
-            return new ISeries[]
-            {
-                new LineSeries<double>
+                var diasVencida = (hoy - c.FechaVencimiento).Days;
+                Notificaciones.Add(new NotificacionItem
                 {
-                    Values = valores,
-                    Fill = null,
-                    Stroke = new SolidColorPaint(color, 2),
-                    GeometrySize = 0,
-                    LineSmoothness = 0.8
-                }
-            };
+                    Titulo = $"Cuota vencida - {c.Prestamo?.Cliente?.Nombre ?? ""}",
+                    Mensaje = $"Cuota #{c.NumeroCuota} — ${c.SaldoPendiente:N2} — {diasVencida} días de atraso",
+                    Tipo = "alerta"
+                });
+            }
+
+            var proximas3 = db.Cuotas
+                .Include(c => c.Prestamo).ThenInclude(p => p.Cliente)
+                .Where(c => c.Estado == EstadoCuota.Pendiente && c.FechaVencimiento > hoy && c.FechaVencimiento <= hoy.AddDays(3))
+                .OrderBy(c => c.FechaVencimiento)
+                .Take(3)
+                .ToList();
+
+            foreach (var c in proximas3)
+            {
+                Notificaciones.Add(new NotificacionItem
+                {
+                    Titulo = $"Próximo vencimiento - {c.Prestamo?.Cliente?.Nombre ?? ""}",
+                    Mensaje = $"Cuota #{c.NumeroCuota} — ${c.SaldoPendiente:N2} — Vence {c.FechaVencimiento:dd/MM/yyyy}",
+                    Tipo = "info"
+                });
+            }
+
+            NotificacionesCount = Notificaciones.Count;
+
+            OnPropertyChanged(nameof(SeriesEstados));
+            OnPropertyChanged(nameof(Notificaciones));
         }
     }
 
@@ -370,5 +278,14 @@ namespace AppPrestamos.ViewModels
                 return new SolidColorBrush(Color.FromArgb(38, c.R, c.G, c.B));
             }
         }
+    }
+
+    public class NotificacionItem
+    {
+        public string Titulo { get; set; } = "";
+        public string Mensaje { get; set; } = "";
+        public string Tipo { get; set; } = "info";
+        public string Color => Tipo == "alerta" ? "#EF4444" : "#3B82F6";
+        public Brush ColorBrush => new SolidColorBrush((Color)ColorConverter.ConvertFromString(Color));
     }
 }
