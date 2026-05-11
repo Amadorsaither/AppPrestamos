@@ -21,29 +21,33 @@
                 </StackPanel>
 
                 <Grid Grid.Column="2">
-                    <Border x:Name="BellBorder" Width="40" Height="40" CornerRadius="20"
-                            Background="#E2E8F0" VerticalAlignment="Center" Cursor="Hand"
-                            ToolTip="Notificaciones">
-                        <Border.InputBindings>
-                            <MouseBinding Gesture="LeftClick" Command="{Binding ToggleNotificacionesCommand}"/>
-                        </Border.InputBindings>
-                        <Grid>
-                            <Viewbox Width="18" Height="18">
-                                <Path Data="M12,22C13.1,22 14,21.1 14,20L10,20C10,21.1 10.9,22 12,22 Z M18,16L18,11C18,7.93 16.36,5.36 13.5,4.68L13.5,4C13.5,3.17 12.83,2.5 12,2.5C11.17,2.5 10.5,3.17 10.5,4L10.5,4.68C7.63,5.36 6,7.92 6,11L6,16L4,18L4,19L20,19L20,18L18,16Z"
-                                      Fill="#334155" Stretch="Uniform"/>
-                            </Viewbox>
-                            <Border Width="16" Height="16" CornerRadius="8"
-                                    Background="#EF4444" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                    BorderThickness="2" BorderBrush="White"
-                                    Visibility="{Binding TieneNotificaciones, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <TextBlock Text="{Binding NotificacionesCount}" FontSize="9" FontWeight="Bold"
-                                           Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                    </Border>
+                    <Button x:Name="BellButton" Width="40" Height="40" VerticalAlignment="Center"
+                            ToolTip="Notificaciones" Command="{Binding ToggleNotificacionesCommand}"
+                            Background="Transparent" BorderThickness="0" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="40" Height="40" CornerRadius="20" Background="#E2E8F0"
+                                        Cursor="Hand">
+                                    <Grid>
+                                        <Viewbox Width="18" Height="18">
+                                            <Path Data="M12,22C13.1,22 14,21.1 14,20L10,20C10,21.1 10.9,22 12,22 Z M18,16L18,11C18,7.93 16.36,5.36 13.5,4.68L13.5,4C13.5,3.17 12.83,2.5 12,2.5C11.17,2.5 10.5,3.17 10.5,4L10.5,4.68C7.63,5.36 6,7.92 6,11L6,16L4,18L4,19L20,19L20,18L18,16Z"
+                                                  Fill="#334155" Stretch="Uniform"/>
+                                        </Viewbox>
+                                        <Border Width="16" Height="16" CornerRadius="8"
+                                                Background="#EF4444" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                BorderThickness="2" BorderBrush="White"
+                                                Visibility="{Binding TieneNotificaciones, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="{Binding NotificacionesCount}" FontSize="9" FontWeight="Bold"
+                                                       Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
                     <Popup IsOpen="{Binding IsNotificacionesOpen}" StaysOpen="False"
-                           Placement="Bottom" PlacementTarget="{Binding ElementName=BellBorder}"
+                           Placement="Bottom" PlacementTarget="{Binding ElementName=BellButton}"
                            HorizontalOffset="-180" VerticalOffset="8" Closed="NotificacionesPopup_Closed">
                         <Border Width="380" MaxHeight="400" Background="White" CornerRadius="12"
                                 Effect="{StaticResource SombraTarjeta}" Padding="0"

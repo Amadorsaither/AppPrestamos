@@ -225,6 +225,23 @@ namespace AppPrestamos.ViewModels
             }
 
             Notificaciones.Clear();
+
+            var nuevosPrestamos = db.Prestamos.Include(p => p.Cliente)
+                .Where(p => p.FechaInicio.Date == hoy)
+                .OrderByDescending(p => p.Id)
+                .Take(3)
+                .ToList();
+
+            foreach (var p in nuevosPrestamos)
+            {
+                Notificaciones.Add(new NotificacionItem
+                {
+                    Titulo = $"Nuevo préstamo - {p.Cliente?.Nombre ?? ""}",
+                    Mensaje = $"${p.Monto:N2} — {p.NumeroCuotas} cuotas",
+                    Tipo = "info"
+                });
+            }
+
             var vencidasHoy = db.Cuotas
                 .Include(c => c.Prestamo).ThenInclude(p => p.Cliente)
                 .Where(c => c.Estado == EstadoCuota.Vencida || (c.Estado == EstadoCuota.Pendiente && c.FechaVencimiento <= hoy))
