@@ -213,11 +213,8 @@
                                             </StackPanel>
                                             <TextBlock Grid.Column="1" Text="{Binding Monto}" FontSize="13" FontWeight="SemiBold" Foreground="#0F172A" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                             <Border Grid.Column="2" CornerRadius="12" Padding="10,4" HorizontalAlignment="Center" Background="#FEF3C7" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Estado}" FontSize="10" FontWeight="SemiBold">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{Binding ColorHex}"/>
-                                                    </TextBlock.Foreground>
-                                                </TextBlock>
+                                                <TextBlock Text="{Binding Estado}" FontSize="10" FontWeight="SemiBold"
+                                                           Foreground="{Binding ColorBrush}"/>
                                             </Border>
                                         </Grid>
                                     </Border>
@@ -321,15 +318,10 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="12" Padding="10,4" HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center" Margin="0,0,12,0">
-                                                <Border.Background>
-                                                    <SolidColorBrush Color="{Binding ColorHex}" Opacity="0.15"/>
-                                                </Border.Background>
-                                                <TextBlock Text="{Binding Estado}" FontSize="11" FontWeight="SemiBold">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{Binding ColorHex}"/>
-                                                    </TextBlock.Foreground>
-                                                </TextBlock>
+                                                    VerticalAlignment="Center" Margin="0,0,12,0"
+                                                    Background="{Binding ColorBrushLight}">
+                                                <TextBlock Text="{Binding Estado}" FontSize="11" FontWeight="SemiBold"
+                                                           Foreground="{Binding ColorBrush}"/>
                                             </Border>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

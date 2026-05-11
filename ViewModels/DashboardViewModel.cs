@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -342,6 +343,15 @@ namespace AppPrestamos.ViewModels
         public string Fecha { get; set; } = "";
         public string Estado { get; set; } = "";
         public string ColorHex { get; set; } = "";
+        public Brush ColorBrush => new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorHex));
+        public Brush ColorBrushLight
+        {
+            get
+            {
+                var c = (Color)ColorConverter.ConvertFromString(ColorHex);
+                return new SolidColorBrush(Color.FromArgb(38, c.R, c.G, c.B));
+            }
+        }
     }
 
     public class PrestamoReciente
@@ -351,5 +361,14 @@ namespace AppPrestamos.ViewModels
         public string Fecha { get; set; } = "";
         public string Estado { get; set; } = "";
         public string ColorHex { get; set; } = "";
+        public Brush ColorBrush => new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorHex));
+        public Brush ColorBrushLight
+        {
+            get
+            {
+                var c = (Color)ColorConverter.ConvertFromString(ColorHex);
+                return new SolidColorBrush(Color.FromArgb(38, c.R, c.G, c.B));
+            }
+        }
     }
 }
