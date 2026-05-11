@@ -67,6 +67,17 @@ namespace AppPrestamos.ViewModels
             IsNotificacionesOpen = !IsNotificacionesOpen;
         }
 
+        [RelayCommand]
+        private void NotificacionClick(NotificacionItem item)
+        {
+            Notificaciones.Remove(item);
+            NotificacionesCount = Notificaciones.Count;
+            IsNotificacionesOpen = false;
+
+            if (!string.IsNullOrEmpty(item.Seccion))
+                WeakReferenceMessenger.Default.Send(new NavigationMessage(item.Seccion));
+        }
+
         public ISeries[] SeriesEstados { get; private set; } = [];
 
         public ObservableCollection<ProximoVencimiento> Vencimientos { get; } = [];
@@ -238,7 +249,8 @@ namespace AppPrestamos.ViewModels
                 {
                     Titulo = $"Nuevo préstamo - {p.Cliente?.Nombre ?? ""}",
                     Mensaje = $"${p.Monto:N2} — {p.NumeroCuotas} cuotas",
-                    Tipo = "info"
+                    Tipo = "info",
+                    Seccion = "Prestamos"
                 });
             }
 
@@ -256,7 +268,8 @@ namespace AppPrestamos.ViewModels
                 {
                     Titulo = $"Cuota vencida - {c.Prestamo?.Cliente?.Nombre ?? ""}",
                     Mensaje = $"Cuota #{c.NumeroCuota} — ${c.SaldoPendiente:N2} — {diasVencida} días de atraso",
-                    Tipo = "alerta"
+                    Tipo = "alerta",
+                    Seccion = "Cuotas"
                 });
             }
 
@@ -273,7 +286,8 @@ namespace AppPrestamos.ViewModels
                 {
                     Titulo = $"Próximo vencimiento - {c.Prestamo?.Cliente?.Nombre ?? ""}",
                     Mensaje = $"Cuota #{c.NumeroCuota} — ${c.SaldoPendiente:N2} — Vence {c.FechaVencimiento:dd/MM/yyyy}",
-                    Tipo = "info"
+                    Tipo = "info",
+                    Seccion = "Cuotas"
                 });
             }
 
@@ -326,6 +340,7 @@ namespace AppPrestamos.ViewModels
         public string Titulo { get; set; } = "";
         public string Mensaje { get; set; } = "";
         public string Tipo { get; set; } = "info";
+        public string Seccion { get; set; } = "";
         public string Color => Tipo == "alerta" ? "#EF4444" : "#3B82F6";
         public Brush ColorBrush => new SolidColorBrush((Color)ColorConverter.ConvertFromString(Color));
     }

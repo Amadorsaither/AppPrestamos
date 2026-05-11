@@ -68,10 +68,15 @@
                                 <ListBox ItemsSource="{Binding Notificaciones}" BorderThickness="0"
                                          Background="Transparent" MaxHeight="320"
                                          Visibility="{Binding TieneNotificaciones, Converter={StaticResource BoolToVisibilityConverter}}">
-                                    <ListBox.ItemTemplate>
+                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Border Height="52" Margin="10,3" CornerRadius="8"
-                                                    Background="#F8FAFC" Padding="10,6">
+                                                    Background="#F8FAFC" Padding="10,6" Cursor="Hand">
+                                                <Border.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick"
+                                                        Command="{Binding DataContext.NotificacionClickCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                        CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
