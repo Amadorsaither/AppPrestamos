@@ -66,10 +66,6 @@ namespace AppPrestamos.ViewModels
         private int notificacionesCount;
 
         /// <summary>Indica si el panel de notificaciones está abierto</summary>
-        [ObservableProperty]
-        private bool isNotificacionesOpen;
-
-        /// <summary>Indica si existen notificaciones pendientes</summary>
         public bool TieneNotificaciones => NotificacionesCount > 0;
 
         partial void OnNotificacionesCountChanged(int value)
@@ -79,13 +75,6 @@ namespace AppPrestamos.ViewModels
 
         /// <summary>Abre o cierra el panel de notificaciones</summary>
         [RelayCommand]
-        private void ToggleNotificaciones()
-        {
-            IsNotificacionesOpen = !IsNotificacionesOpen;
-        }
-
-        /// <summary>Procesa el clic en una notificación y navega a la sección correspondiente</summary>
-        [RelayCommand]
         private void NotificacionClick(NotificacionItem item)
         {
             if (!string.IsNullOrEmpty(item.ItemKey))
@@ -93,7 +82,6 @@ namespace AppPrestamos.ViewModels
 
             Notificaciones.Remove(item);
             NotificacionesCount = Notificaciones.Count;
-            IsNotificacionesOpen = false;
 
             if (!string.IsNullOrEmpty(item.Seccion))
                 WeakReferenceMessenger.Default.Send(new NavigationMessage(item.Seccion));

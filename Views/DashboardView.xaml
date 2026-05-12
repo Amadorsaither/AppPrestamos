@@ -7,118 +7,11 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" BorderThickness="0">
         <StackPanel Margin="30,25,30,30">
 
-            <Grid Margin="0,0,0,25">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Dashboard" FontSize="30" FontWeight="Bold" Foreground="#0F172A"/>
-                    <TextBlock Text="Resumen general del sistema de pr&#233;stamos" FontSize="13"
-                               Foreground="#475569" Margin="0,3,0,0"/>
-                </StackPanel>
-
-                <Grid Grid.Column="2">
-                    <Button x:Name="BellButton" Width="40" Height="40" VerticalAlignment="Center"
-                            ToolTip="Notificaciones" Command="{Binding ToggleNotificacionesCommand}"
-                            Background="Transparent" BorderThickness="0" Cursor="Hand">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="40" Height="40" CornerRadius="20" Background="#E2E8F0"
-                                        Cursor="Hand">
-                                    <Grid>
-                                        <Viewbox Width="18" Height="18">
-                                            <Path Data="M12,22C13.1,22 14,21.1 14,20L10,20C10,21.1 10.9,22 12,22 Z M18,16L18,11C18,7.93 16.36,5.36 13.5,4.68L13.5,4C13.5,3.17 12.83,2.5 12,2.5C11.17,2.5 10.5,3.17 10.5,4L10.5,4.68C7.63,5.36 6,7.92 6,11L6,16L4,18L4,19L20,19L20,18L18,16Z"
-                                                  Fill="#334155" Stretch="Uniform"/>
-                                        </Viewbox>
-                                        <Border Width="16" Height="16" CornerRadius="8"
-                                                Background="#EF4444" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                                BorderThickness="2" BorderBrush="White"
-                                                Visibility="{Binding TieneNotificaciones, Converter={StaticResource BoolToVisibilityConverter}}">
-                                            <TextBlock Text="{Binding NotificacionesCount}" FontSize="9" FontWeight="Bold"
-                                                       Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </Grid>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
-
-                    <Popup IsOpen="{Binding IsNotificacionesOpen}" StaysOpen="False"
-                           Placement="Bottom" PlacementTarget="{Binding ElementName=BellButton}"
-                           HorizontalOffset="-180" VerticalOffset="8" Closed="NotificacionesPopup_Closed">
-                        <Border Width="380" MaxHeight="400" Background="White" CornerRadius="12"
-                                Effect="{StaticResource SombraTarjeta}" Padding="0"
-                                BorderThickness="1" BorderBrush="#E2E8F0">
-                            <StackPanel>
-                                <Grid Margin="16,14,16,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Notificaciones" FontSize="16" FontWeight="Bold"
-                                               Foreground="#0F172A" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding NotificacionesCount, StringFormat='{}{0} pendientes'}"
-                                               FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
-                                </Grid>
-                                <Rectangle Height="1" Fill="#E2E8F0" Margin="0"/>
-
-                                <ListBox ItemsSource="{Binding Notificaciones}" BorderThickness="0"
-                                         Background="Transparent" MaxHeight="320"
-                                         Visibility="{Binding TieneNotificaciones, Converter={StaticResource BoolToVisibilityConverter}}">
-                                     <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Height="52" Margin="10,3" CornerRadius="8"
-                                                    Background="#F8FAFC" Padding="10,6" Cursor="Hand">
-                                                <Border.InputBindings>
-                                                    <MouseBinding Gesture="LeftClick"
-                                                        Command="{Binding DataContext.NotificacionClickCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                                        CommandParameter="{Binding}"/>
-                                                </Border.InputBindings>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Border Grid.Column="0" Width="8" Height="8" CornerRadius="4"
-                                                            Background="{Binding ColorBrush}" VerticalAlignment="Top"
-                                                            Margin="0,6,0,0"/>
-                                                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                                        <TextBlock Text="{Binding Titulo}" FontSize="12" FontWeight="SemiBold"
-                                                                   Foreground="#0F172A"/>
-                                                        <TextBlock Text="{Binding Mensaje}" FontSize="11" Foreground="#475569"
-                                                                   Margin="0,2,0,0"/>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-
-                                <Border Height="80" CornerRadius="0,0,12,12" Background="#F8FAFC">
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding TieneNotificaciones}" Value="False">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <TextBlock Text="✓" FontSize="24" Foreground="#10B981" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="No hay notificaciones" FontSize="13" Foreground="#475569" Margin="0,4,0,0"/>
-                                        <TextBlock Text="Todo est&#225; al d&#237;a" FontSize="11" Foreground="#94A3B8"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-                        </Border>
-                    </Popup>
-                </Grid>
-            </Grid>
+            <StackPanel Margin="0,0,0,25">
+                <TextBlock Text="Dashboard" FontSize="30" FontWeight="Bold" Foreground="#0F172A"/>
+                <TextBlock Text="Resumen general del sistema de pr&#233;stamos" FontSize="13"
+                           Foreground="#475569" Margin="0,3,0,0"/>
+            </StackPanel>
 
             <Grid Margin="0,0,0,25">
                 <Grid.ColumnDefinitions>
@@ -307,7 +200,12 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Border Height="52" Margin="0,0,0,3" CornerRadius="8"
-                                            Background="#F8FAFC" Padding="10,6">
+                                            Background="#F8FAFC" Padding="10,6" Cursor="Hand">
+                                        <Border.InputBindings>
+                                            <MouseBinding Gesture="LeftClick"
+                                                Command="{Binding DataContext.NotificacionClickCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"/>
+                                        </Border.InputBindings>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
