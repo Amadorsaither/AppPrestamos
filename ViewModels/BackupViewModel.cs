@@ -7,21 +7,28 @@ using Microsoft.Win32;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel para la sección de respaldo y restauración de la base de datos</summary>
     public partial class BackupViewModel : ObservableObject
     {
+        /// <summary>Tamaño actual del archivo de base de datos</summary>
         [ObservableProperty]
         private string tamanoActual = "";
 
+        /// <summary>Mensaje informativo sobre el resultado de la operación</summary>
         [ObservableProperty]
         private string mensaje = "";
 
+        /// <summary>Indica si hay un mensaje informativo visible</summary>
         [ObservableProperty]
         private bool hayMensaje;
 
+        /// <summary>Indica si el mensaje es de éxito (true) o de error (false)</summary>
         [ObservableProperty]
         private bool mensajeExitoso;
 
+        /// <summary>Comando para crear un respaldo de la base de datos</summary>
         public ICommand CrearBackupCommand { get; }
+        /// <summary>Comando para restaurar un respaldo de la base de datos</summary>
         public ICommand RestaurarCommand { get; }
 
         public BackupViewModel()

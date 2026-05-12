@@ -13,48 +13,63 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel del Dashboard que carga y expone los datos del resumen principal</summary>
     public partial class DashboardViewModel : ObservableObject
     {
         private static readonly HashSet<string> NotificacionesVistas = new();
+        /// <summary>Total de clientes registrados en el sistema</summary>
         [ObservableProperty]
         private string totalClientes = "0";
 
+        /// <summary>Subtítulo descriptivo para la tarjeta de clientes</summary>
         [ObservableProperty]
         private string subtituloClientes = "Clientes Registrados";
 
+        /// <summary>Total de préstamos activos actualmente</summary>
         [ObservableProperty]
         private string totalPrestamos = "0";
 
+        /// <summary>Subtítulo descriptivo para la tarjeta de préstamos</summary>
         [ObservableProperty]
         private string subtituloPrestamos = "Pr\u00e9stamos Activos";
 
+        /// <summary>Monto total prestado acumulado</summary>
         [ObservableProperty]
         private string totalMonto = "$0";
 
+        /// <summary>Subtítulo descriptivo para la tarjeta de monto total</summary>
         [ObservableProperty]
         private string subtituloMonto = "Monto Total Prestado";
 
+        /// <summary>Total de pagos realizados en el mes actual</summary>
         [ObservableProperty]
         private string totalPagos = "$0";
 
+        /// <summary>Subtítulo descriptivo para la tarjeta de pagos</summary>
         [ObservableProperty]
         private string subtituloPagos = "Pagos del Mes";
 
+        /// <summary>Cantidad de préstamos en estado Activo</summary>
         [ObservableProperty]
         private int activosCount;
 
+        /// <summary>Cantidad de préstamos en estado Pagado</summary>
         [ObservableProperty]
         private int pagadosCount;
 
+        /// <summary>Cantidad de préstamos en estado En Mora</summary>
         [ObservableProperty]
         private int moraCount;
 
+        /// <summary>Número de notificaciones activas</summary>
         [ObservableProperty]
         private int notificacionesCount;
 
+        /// <summary>Indica si el panel de notificaciones está abierto</summary>
         [ObservableProperty]
         private bool isNotificacionesOpen;
 
+        /// <summary>Indica si existen notificaciones pendientes</summary>
         public bool TieneNotificaciones => NotificacionesCount > 0;
 
         partial void OnNotificacionesCountChanged(int value)
@@ -62,12 +77,14 @@ namespace AppPrestamos.ViewModels
             OnPropertyChanged(nameof(TieneNotificaciones));
         }
 
+        /// <summary>Abre o cierra el panel de notificaciones</summary>
         [RelayCommand]
         private void ToggleNotificaciones()
         {
             IsNotificacionesOpen = !IsNotificacionesOpen;
         }
 
+        /// <summary>Procesa el clic en una notificación y navega a la sección correspondiente</summary>
         [RelayCommand]
         private void NotificacionClick(NotificacionItem item)
         {
@@ -82,28 +99,37 @@ namespace AppPrestamos.ViewModels
                 WeakReferenceMessenger.Default.Send(new NavigationMessage(item.Seccion));
         }
 
+        /// <summary>Series de datos para el gráfico circular de estados de préstamos</summary>
         public ISeries[] SeriesEstados { get; private set; } = [];
 
+        /// <summary>Colección de próximos vencimientos de cuotas</summary>
         public ObservableCollection<ProximoVencimiento> Vencimientos { get; } = [];
+        /// <summary>Colección de préstamos registrados recientemente</summary>
         public ObservableCollection<PrestamoReciente> PrestamosRecientes { get; } = [];
+        /// <summary>Colección de notificaciones activas</summary>
         public ObservableCollection<NotificacionItem> Notificaciones { get; } = [];
 
+        /// <summary>Navega a la sección de Clientes para registrar uno nuevo</summary>
         [RelayCommand]
         private void NuevoCliente() =>
             WeakReferenceMessenger.Default.Send(new NavigationMessage("Clientes"));
 
+        /// <summary>Navega a la sección de Préstamos para registrar uno nuevo</summary>
         [RelayCommand]
         private void NuevoPrestamo() =>
             WeakReferenceMessenger.Default.Send(new NavigationMessage("Prestamos"));
 
+        /// <summary>Navega a la sección de Pagos para registrar un pago</summary>
         [RelayCommand]
         private void RegistrarPago() =>
             WeakReferenceMessenger.Default.Send(new NavigationMessage("Pagos"));
 
+        /// <summary>Navega a la sección de Reportes de mora</summary>
         [RelayCommand]
         private void ReporteMora() =>
             WeakReferenceMessenger.Default.Send(new NavigationMessage("Reportes"));
 
+        /// <summary>Navega directamente al pago de una cuota específica</summary>
         [RelayCommand]
         private void IrAPago(ProximoVencimiento vencimiento)
         {
@@ -115,6 +141,7 @@ namespace AppPrestamos.ViewModels
             CargarDatos();
         }
 
+        /// <summary>Carga todos los datos del Dashboard desde la base de datos</summary>
         public void CargarDatos()
         {
             using var db = new AppDbContext();

@@ -11,33 +11,43 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel para la sección de pagos, maneja registro y eliminación de pagos sobre cuotas</summary>
     public partial class PagosViewModel : ObservableValidator
     {
+        /// <summary>Lista de cuotas pendientes disponibles para pagar</summary>
         [ObservableProperty]
         private ObservableCollection<Cuota> cuotasPendientes = new();
 
+        /// <summary>Historial de pagos registrados</summary>
         [ObservableProperty]
         private ObservableCollection<Pago> pagos = new();
 
+        /// <summary>Cuota actualmente seleccionada para registrar un pago</summary>
         [ObservableProperty]
         private Cuota? cuotaSeleccionada;
 
+        /// <summary>Identificador de la cuota seleccionada (para carga inicial)</summary>
         [ObservableProperty]
         private int? cuotaSeleccionadaId;
 
+        /// <summary>Monto que se registrará como pago en la cuota seleccionada</summary>
         [ObservableProperty]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a cero")]
         private decimal montoAPagar;
 
+        /// <summary>Observación opcional asociada al pago</summary>
         [ObservableProperty]
         private string observacion = string.Empty;
 
+        /// <summary>Pago seleccionado en el historial para eliminación</summary>
         [ObservableProperty]
         private Pago? pagoSeleccionado;
 
+        /// <summary>Mensaje de error del formulario de pago</summary>
         [ObservableProperty]
         private string errorFormulario = string.Empty;
 
+        /// <summary>Indica si el formulario contiene un mensaje de error</summary>
         public bool TieneError => !string.IsNullOrEmpty(ErrorFormulario);
 
         public PagosViewModel() : this(null) { }
@@ -87,6 +97,7 @@ namespace AppPrestamos.ViewModels
                 MontoAPagar = value.SaldoPendiente;
         }
 
+        /// <summary>Registra un pago sobre la cuota seleccionada, actualizando el saldo y el estado</summary>
         [RelayCommand]
         private void RegistrarPago()
         {
@@ -148,6 +159,7 @@ namespace AppPrestamos.ViewModels
             MessageBox.Show("Pago registrado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        /// <summary>Elimina un pago seleccionado y restaura el saldo de la cuota correspondiente</summary>
         [RelayCommand]
         private void EliminarPago()
         {

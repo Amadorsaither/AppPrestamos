@@ -12,52 +12,68 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel para la gestión de préstamos (creación, cancelación y eliminación)</summary>
     public partial class PrestamosViewModel : ObservableValidator
     {
         private readonly PrestamoService _prestamoService = new();
 
+        /// <summary>Colección observable de clientes disponibles para asignar un préstamo</summary>
         [ObservableProperty]
         private ObservableCollection<Cliente> clientes = new();
 
+        /// <summary>Colección observable de préstamos registrados</summary>
         [ObservableProperty]
         private ObservableCollection<Prestamo> prestamos = new();
 
+        /// <summary>Cliente seleccionado para el nuevo préstamo</summary>
         [ObservableProperty]
         private Cliente? clienteSeleccionado;
 
+        /// <summary>Préstamo seleccionado en la lista</summary>
         [ObservableProperty]
         private Prestamo? prestamoSeleccionado;
 
+        /// <summary>Monto del préstamo</summary>
         [ObservableProperty]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a cero")]
         private decimal monto;
 
+        /// <summary>Tasa de interés del préstamo</summary>
         [ObservableProperty]
         [Range(0, 100, ErrorMessage = "La tasa debe estar entre 0 y 100")]
         private decimal tasaInteres;
 
+        /// <summary>Tipo de interés (Simple o Compuesto)</summary>
         [ObservableProperty]
         private TipoInteres tipoInteres = Enums.TipoInteres.Simple;
 
+        /// <summary>Frecuencia de pago (Mensual, Quincenal, etc.)</summary>
         [ObservableProperty]
         private FrecuenciaPago frecuenciaPago = Enums.FrecuenciaPago.Mensual;
 
+        /// <summary>Número de cuotas del préstamo</summary>
         [ObservableProperty]
         [Range(1, 360, ErrorMessage = "El número de cuotas debe estar entre 1 y 360")]
         private int numeroCuotas = 12;
 
+        /// <summary>Fecha de inicio del préstamo</summary>
         [ObservableProperty]
         private DateTime fechaInicio = DateTime.Now;
 
+        /// <summary>Tasa de mora diaria por incumplimiento</summary>
         [ObservableProperty]
         [Range(0, 100, ErrorMessage = "La tasa de mora debe estar entre 0 y 100")]
         private decimal tasaMoraDiaria;
 
+        /// <summary>Mensaje de error de validación del formulario</summary>
         [ObservableProperty]
         private string errorFormulario = string.Empty;
 
+        /// <summary>Indica si hay errores de validación en el formulario</summary>
         public bool TieneError => !string.IsNullOrEmpty(ErrorFormulario);
+        /// <summary>Valores del enumerado TipoInteres para el combo box</summary>
         public Array TipoInteresValues { get; } = Enum.GetValues(typeof(Enums.TipoInteres));
+        /// <summary>Valores del enumerado FrecuenciaPago para el combo box</summary>
         public Array FrecuenciaPagoValues { get; } = Enum.GetValues(typeof(Enums.FrecuenciaPago));
 
         public PrestamosViewModel()
@@ -84,6 +100,7 @@ namespace AppPrestamos.ViewModels
                 Prestamos.Add(p);
         }
 
+        /// <summary>Crea un nuevo préstamo con los datos del formulario y genera sus cuotas</summary>
         [RelayCommand]
         private void CrearPrestamo()
         {
@@ -140,6 +157,7 @@ namespace AppPrestamos.ViewModels
             ErrorFormulario = string.Empty;
         }
 
+        /// <summary>Cancela un préstamo activo marcándolo como pagado</summary>
         [RelayCommand]
         private void CancelarPrestamo()
         {
@@ -178,6 +196,7 @@ namespace AppPrestamos.ViewModels
             MessageBox.Show("Préstamo cancelado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        /// <summary>Elimina un préstamo si no tiene pagos registrados</summary>
         [RelayCommand]
         private void EliminarPrestamo()
         {
@@ -214,6 +233,7 @@ namespace AppPrestamos.ViewModels
             MessageBox.Show("Préstamo eliminado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        /// <summary>Navega a la sección de cuotas del préstamo seleccionado</summary>
         [RelayCommand]
         private void VerCuotas()
         {

@@ -5,8 +5,10 @@ using AppPrestamos.Models;
 
 namespace AppPrestamos.Services
 {
+    /// <summary>Servicio de autenticación de usuarios con PBKDF2</summary>
     public class AuthService
     {
+        /// <summary>Inicia sesión verificando las credenciales contra la base de datos</summary>
         public Usuario? Login(string nombreUsuario, string contrasena)
         {
             using var db = new AppDbContext();
@@ -19,6 +21,7 @@ namespace AppPrestamos.Services
             return VerificarContrasena(contrasena, usuario.ContrasenaHash) ? usuario : null;
         }
 
+        /// <summary>Crea un nuevo usuario con contraseña hasheada usando PBKDF2</summary>
         public void CrearUsuario(string nombreUsuario, string contrasena, string rol = "Usuario")
         {
             using var db = new AppDbContext();
@@ -34,6 +37,7 @@ namespace AppPrestamos.Services
             db.SaveChanges();
         }
 
+        /// <summary>Crea el usuario administrador por defecto si no existe ningún usuario en el sistema</summary>
         public void SeedAdminSiNoExiste()
         {
             using var db = new AppDbContext();

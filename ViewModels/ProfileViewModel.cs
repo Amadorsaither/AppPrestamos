@@ -7,38 +7,50 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel para el perfil del usuario, muestra información y permite cambiar la contraseña</summary>
     public partial class ProfileViewModel : ObservableObject
     {
+        /// <summary>Nombre de usuario del usuario autenticado</summary>
         [ObservableProperty]
         private string nombreUsuario = "";
 
+        /// <summary>Inicial del nombre de usuario para mostrar en el avatar</summary>
         [ObservableProperty]
         private string inicial = "";
 
+        /// <summary>Rol del usuario autenticado (Administrador, etc.)</summary>
         [ObservableProperty]
         private string rol = "";
 
+        /// <summary>Fecha de creación de la cuenta del usuario</summary>
         [ObservableProperty]
         private DateTime fechaCreacion;
 
+        /// <summary>Contraseña actual del usuario para verificar cambio</summary>
         [ObservableProperty]
         private string contrasenaActual = "";
 
+        /// <summary>Nueva contraseña que se desea establecer</summary>
         [ObservableProperty]
         private string nuevaContrasena = "";
 
+        /// <summary>Confirmación de la nueva contraseña para verificar coincidencia</summary>
         [ObservableProperty]
         private string confirmarContrasena = "";
 
+        /// <summary>Mensaje informativo sobre el resultado del cambio de contraseña</summary>
         [ObservableProperty]
         private string mensaje = "";
 
+        /// <summary>Indica si hay un mensaje informativo visible</summary>
         [ObservableProperty]
         private bool hayMensaje;
 
+        /// <summary>Indica si el mensaje es de éxito (true) o de error (false)</summary>
         [ObservableProperty]
         private bool mensajeExitoso;
 
+        /// <summary>Comando para cambiar la contraseña del usuario actual</summary>
         public ICommand CambiarContrasenaCommand { get; }
 
         public ProfileViewModel()

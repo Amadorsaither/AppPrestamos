@@ -6,20 +6,28 @@ using CommunityToolkit.Mvvm.Messaging;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel principal que maneja la navegación entre secciones de la aplicación</summary>
     public partial class MainViewModel : ObservableObject
     {
+        /// <summary>ViewModel actual mostrado en el área de contenido principal</summary>
         [ObservableProperty]
         private object? currentViewModel;
 
+        /// <summary>Nombre de la sección actualmente seleccionada en el menú de navegación</summary>
         [ObservableProperty]
         private string selectedSection = "Dashboard";
 
+        /// <summary>Nombre del usuario autenticado actualmente</summary>
         public string UsuarioNombre => App.UsuarioActual?.NombreUsuario ?? "";
+        /// <summary>Rol del usuario autenticado actualmente</summary>
         public string UsuarioRol => App.UsuarioActual?.Rol ?? "";
+        /// <summary>Inicial del nombre del usuario para mostrar en la interfaz</summary>
         public string UsuarioInicial => UsuarioNombre.Length > 0 ? UsuarioNombre[..1].ToUpper() : "?";
 
+        /// <summary>Evento que se dispara al solicitar el cierre de sesión</summary>
         public event EventHandler? SolicitarCierre;
 
+        /// <summary>Comando para cerrar la sesión del usuario actual</summary>
         public ICommand CerrarSesionCommand { get; }
 
         public MainViewModel()
@@ -58,6 +66,7 @@ namespace AppPrestamos.ViewModels
             SolicitarCierre?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>Navega a la sección de Dashboard</summary>
         [RelayCommand]
         private void NavigateToDashboard()
         {
@@ -65,6 +74,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new DashboardViewModel();
         }
 
+        /// <summary>Navega a la sección de Clientes</summary>
         [RelayCommand]
         private void NavigateToClientes()
         {
@@ -72,6 +82,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new ClientesViewModel();
         }
 
+        /// <summary>Navega a la sección de Préstamos</summary>
         [RelayCommand]
         private void NavigateToPrestamos()
         {
@@ -79,6 +90,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new PrestamosViewModel();
         }
 
+        /// <summary>Navega a la sección de Cuotas</summary>
         [RelayCommand]
         private void NavigateToCuotas()
         {
@@ -86,6 +98,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new CuotasViewModel();
         }
 
+        /// <summary>Navega a la sección de Pagos</summary>
         [RelayCommand]
         private void NavigateToPagos()
         {
@@ -93,6 +106,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new PagosViewModel();
         }
 
+        /// <summary>Navega a la sección de Reportes</summary>
         [RelayCommand]
         private void NavigateToReportes()
         {
@@ -100,6 +114,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new ReportesViewModel();
         }
 
+        /// <summary>Navega a la sección de Backup</summary>
         [RelayCommand]
         private void NavigateToBackup()
         {
@@ -107,6 +122,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new BackupViewModel();
         }
 
+        /// <summary>Navega a la sección de Auditoría</summary>
         [RelayCommand]
         private void NavigateToAuditoria()
         {
@@ -114,6 +130,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new AuditoriaViewModel();
         }
 
+        /// <summary>Navega a la sección de Simulador</summary>
         [RelayCommand]
         private void NavigateToSimulador()
         {
@@ -121,6 +138,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new SimuladorViewModel();
         }
 
+        /// <summary>Navega a la sección de Calendario</summary>
         [RelayCommand]
         private void NavigateToCalendario()
         {
@@ -128,6 +146,7 @@ namespace AppPrestamos.ViewModels
             CurrentViewModel = new CalendarioViewModel();
         }
 
+        /// <summary>Navega a la sección de Perfil</summary>
         [RelayCommand]
         private void NavigateToProfile()
         {

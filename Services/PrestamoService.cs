@@ -3,8 +3,10 @@ using AppPrestamos.Models;
 
 namespace AppPrestamos.Services
 {
+    /// <summary>Servicio de cálculo y generación de préstamos y cuotas</summary>
     public class PrestamoService
     {
+        /// <summary>Calcula el monto total del préstamo según el tipo de interés (simple o compuesto)</summary>
         public decimal CalcularMontoTotal(
             decimal monto,
             decimal tasaInteres,
@@ -24,6 +26,7 @@ namespace AppPrestamos.Services
             }
         }
 
+        /// <summary>Genera la lista de cuotas para un préstamo distribuyendo capital e intereses</summary>
         public List<Cuota> GenerarCuotas(Prestamo prestamo)
         {
             var cuotas = new List<Cuota>();
@@ -63,6 +66,7 @@ namespace AppPrestamos.Services
             return cuotas;
         }
 
+        /// <summary>Calcula la fecha de vencimiento de una cuota según la frecuencia de pago</summary>
         public DateTime CalcularFechaVencimiento(
             DateTime fechaInicio,
             FrecuenciaPago frecuencia,

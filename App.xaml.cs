@@ -7,10 +7,21 @@ using AppPrestamos.Views;
 
 namespace AppPrestamos
 {
+    /// <summary>
+    /// Punto de entrada principal de la aplicación. Gestiona la migración de la base de datos,
+    /// la inicialización del usuario administrador y la navegación entre ventanas de inicio de sesión y principal.
+    /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Usuario que ha iniciado sesión actualmente en la aplicación.
+        /// </summary>
         public static Usuario? UsuarioActual { get; set; }
 
+        /// <summary>
+        /// Constructor que ejecuta las migraciones de Entity Framework y crea las tablas iniciales
+        /// (Usuario y Auditoria) si no existen, luego siembra el usuario administrador por defecto.
+        /// </summary>
         public App()
         {
             using (var db = new AppDbContext())
@@ -42,11 +53,18 @@ namespace AppPrestamos
             new AuthService().SeedAdminSiNoExiste();
         }
 
+        /// <summary>
+        /// Se ejecuta al iniciar la aplicación. Muestra la ventana de inicio de sesión.
+        /// </summary>
         protected override void OnStartup(StartupEventArgs e)
         {
             MostrarLogin();
         }
 
+        /// <summary>
+        /// Abre la ventana de inicio de sesión. Si el usuario inicia sesión correctamente,
+        /// abre la ventana principal; si no, cierra la aplicación.
+        /// </summary>
         public void MostrarLogin()
         {
             var login = new LoginWindow();

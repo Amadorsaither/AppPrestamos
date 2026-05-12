@@ -6,8 +6,10 @@ using QuestPDF.Infrastructure;
 
 namespace AppPrestamos.Services
 {
+    /// <summary>Servicio de exportación de reportes a formatos PDF y Excel</summary>
     public class ReportExportService
     {
+        /// <summary>Exporta el reporte del sistema de préstamos a un archivo PDF usando QuestPDF</summary>
         public void ExportarPdf(string filePath, ReportesViewModel vm)
         {
             QuestPDF.Settings.License = LicenseType.Community;
@@ -133,6 +135,7 @@ namespace AppPrestamos.Services
             }).GeneratePdf(filePath);
         }
 
+        /// <summary>Exporta el reporte del sistema de préstamos a un archivo Excel usando ClosedXML</summary>
         public void ExportarExcel(string filePath, ReportesViewModel vm)
         {
             using var workbook = new XLWorkbook();

@@ -11,45 +11,58 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel para la gestión de clientes (CRUD y búsqueda)</summary>
     public partial class ClientesViewModel : ObservableValidator
     {
+        /// <summary>Nombre completo del cliente</summary>
         [ObservableProperty]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [MinLength(3, ErrorMessage = "El nombre debe tener al menos 3 caracteres")]
         private string nombre = string.Empty;
 
+        /// <summary>Número de cédula del cliente</summary>
         [ObservableProperty]
         [Required(ErrorMessage = "La cédula es obligatoria")]
         [MinLength(6, ErrorMessage = "La cédula debe tener al menos 6 caracteres")]
         private string cedula = string.Empty;
 
+        /// <summary>Número de teléfono del cliente</summary>
         [ObservableProperty]
         [Required(ErrorMessage = "El teléfono es obligatorio")]
         private string telefono = string.Empty;
 
+        /// <summary>Dirección física del cliente</summary>
         [ObservableProperty]
         private string direccion = string.Empty;
 
+        /// <summary>Cliente actualmente seleccionado en la lista</summary>
         [ObservableProperty]
         private Cliente? clienteSeleccionado;
 
+        /// <summary>Texto para filtrar la lista de clientes</summary>
         [ObservableProperty]
         private string textoBusqueda = string.Empty;
 
+        /// <summary>Indica si se está editando un cliente existente</summary>
         [ObservableProperty]
         private bool estaEditando;
 
+        /// <summary>Mensaje de error de validación del formulario</summary>
         [ObservableProperty]
         private string errorFormulario = string.Empty;
 
         private int? clienteIdEditando;
 
+        /// <summary>Indica si hay errores de validación en el formulario</summary>
         public bool TieneError => !string.IsNullOrEmpty(ErrorFormulario);
+        /// <summary>Texto dinámico del botón de guardar según el modo (editar o crear)</summary>
         public string TextoBotonGuardar => EstaEditando ? "Actualizar Cliente" : "Guardar Cliente";
         private int totalClientesDb;
 
+        /// <summary>Total de clientes registrados formateado para mostrar</summary>
         public string TotalClientes => $"{totalClientesDb} registrados";
 
+        /// <summary>Colección observable de clientes cargados desde la base de datos</summary>
         public ObservableCollection<Cliente> Clientes { get; } = new();
 
         public ClientesViewModel()
@@ -80,6 +93,7 @@ namespace AppPrestamos.ViewModels
                 Clientes.Add(c);
         }
 
+        /// <summary>Guarda un cliente nuevo o actualiza uno existente en la base de datos</summary>
         [RelayCommand]
         private void Guardar()
         {
@@ -128,6 +142,7 @@ namespace AppPrestamos.ViewModels
             CargarClientes();
         }
 
+        /// <summary>Carga los datos del cliente seleccionado en el formulario para edición</summary>
         [RelayCommand]
         private void Editar()
         {
@@ -145,6 +160,7 @@ namespace AppPrestamos.ViewModels
             ErrorFormulario = string.Empty;
         }
 
+        /// <summary>Cancela la edición y limpia el formulario de cliente</summary>
         [RelayCommand]
         private void CancelarEdicion()
         {
@@ -157,6 +173,7 @@ namespace AppPrestamos.ViewModels
             ErrorFormulario = string.Empty;
         }
 
+        /// <summary>Elimina el cliente seleccionado después de confirmar la operación</summary>
         [RelayCommand]
         private void Eliminar()
         {

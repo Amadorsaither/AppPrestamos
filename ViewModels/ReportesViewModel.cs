@@ -14,35 +14,50 @@ using SkiaSharp;
 
 namespace AppPrestamos.ViewModels
 {
+    /// <summary>ViewModel para la sección de reportes, muestra estadísticas y gráficos del sistema</summary>
     public partial class ReportesViewModel : ObservableObject
     {
+        /// <summary>Total de clientes registrados en el sistema</summary>
         [ObservableProperty]
         private string totalClientes = "0";
 
+        /// <summary>Total de préstamos registrados en el sistema</summary>
         [ObservableProperty]
         private string totalPrestamos = "0";
 
+        /// <summary>Total de dinero desembolsado en préstamos</summary>
         [ObservableProperty]
         private string montoDesembolsado = "$0";
 
+        /// <summary>Total de dinero cobrado a través de pagos</summary>
         [ObservableProperty]
         private string montoCobrado = "$0";
 
+        /// <summary>Saldo total pendiente por cobrar</summary>
         [ObservableProperty]
         private string saldoPendiente = "$0";
 
+        /// <summary>Cantidad de cuotas en estado vencido (mora)</summary>
         [ObservableProperty]
         private string clientesEnMora = "0";
 
+        /// <summary>Series del gráfico circular con el estado de los préstamos (activos, pagados, en mora)</summary>
         public ISeries[] SeriesEstadoPrestamos { get; private set; } = [];
+        /// <summary>Series del gráfico de barras con ingresos mensuales</summary>
         public ISeries[] SeriesIngresosMensuales { get; private set; } = [];
+        /// <summary>Eje X del gráfico de ingresos mensuales (etiquetas de meses)</summary>
         public Axis[] EjesIngresosX { get; private set; } = [];
+        /// <summary>Eje Y del gráfico de ingresos mensuales (valores monetarios)</summary>
         public Axis[] EjesIngresosY { get; private set; } = [];
 
+        /// <summary>Lista de clientes con cuotas vencidas para la tabla de mora</summary>
         public ObservableCollection<ClienteMora> ClientesMora { get; } = [];
+        /// <summary>Resumen mensual de préstamos y cobros del año actual</summary>
         public ObservableCollection<ResumenAnual> ResumenAnual { get; } = [];
 
+        /// <summary>Comando para exportar el reporte a PDF</summary>
         public ICommand ExportarPdfCommand { get; }
+        /// <summary>Comando para exportar el reporte a Excel</summary>
         public ICommand ExportarExcelCommand { get; }
 
         public ReportesViewModel()
@@ -220,21 +235,33 @@ namespace AppPrestamos.ViewModels
         }
     }
 
+    /// <summary>Modelo que representa un cliente con cuota vencida para la tabla de mora</summary>
     public class ClienteMora
     {
+        /// <summary>Nombre del cliente en mora</summary>
         public string Cliente { get; set; } = "";
+        /// <summary>Identificador del préstamo asociado</summary>
         public int PrestamoId { get; set; }
+        /// <summary>Número de cuota vencida</summary>
         public int CuotaNumero { get; set; }
+        /// <summary>Monto pendiente de la cuota vencida</summary>
         public decimal Monto { get; set; }
+        /// <summary>Fecha de vencimiento de la cuota</summary>
         public string Vencimiento { get; set; } = "";
+        /// <summary>Cantidad de días que lleva vencida la cuota</summary>
         public int DiasVencido { get; set; }
+        /// <summary>Color hexadecimal que indica la gravedad de la mora (rojo, naranja, azul)</summary>
         public string ColorDias { get; set; } = "";
     }
 
+    /// <summary>Modelo que representa el resumen mensual de préstamos y cobros</summary>
     public class ResumenAnual
     {
+        /// <summary>Nombre del mes (ej. enero 2026)</summary>
         public string Mes { get; set; } = "";
+        /// <summary>Cantidad de préstamos otorgados en el mes</summary>
         public int Prestamos { get; set; }
+        /// <summary>Total cobrado en el mes</summary>
         public decimal Cobrado { get; set; }
     }
 }
