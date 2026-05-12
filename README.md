@@ -77,6 +77,6 @@ dotnet publish -c Release -r win-x64 --self-contained true -o publish
 
 ## Autor
 
-**Amado Saither Amador**
+**Saither Amador**
 
 GitHub: [https://github.com/Amadorsaither](https://github.com/Amadorsaither)
