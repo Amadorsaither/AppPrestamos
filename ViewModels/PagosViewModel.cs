@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
-using System.Windows.Threading;
 using AppPrestamos.Data;
 using AppPrestamos.Enums;
 using AppPrestamos.Models;
@@ -24,6 +23,9 @@ namespace AppPrestamos.ViewModels
         private Cuota? cuotaSeleccionada;
 
         [ObservableProperty]
+        private int? cuotaSeleccionadaId;
+
+        [ObservableProperty]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a cero")]
         private decimal montoAPagar;
 
@@ -42,30 +44,23 @@ namespace AppPrestamos.ViewModels
 
         public PagosViewModel(int? cuotaId)
         {
-            CargarCuotasPendientes();
+            CargarCuotasPendientes(cuotaId);
             CargarPagos();
-
-            if (cuotaId.HasValue)
-                SeleccionarCuota(cuotaId.Value);
-        }
-
-        private void SeleccionarCuota(int cuotaId)
-        {
-            var target = CuotasPendientes.FirstOrDefault(c => c.Id == cuotaId);
-            if (target is not null)
-                Dispatcher.CurrentDispatcher.BeginInvoke(() => CuotaSeleccionada = target);
         }
 
         partial void OnErrorFormularioChanged(string value) => OnPropertyChanged(nameof(TieneError));
 
-        private void CargarCuotasPendientes()
+        private void CargarCuotasPendientes(int? seleccionarId = null)
         {
             using var db = new AppDbContext();
             CuotasPendientes.Clear();
             foreach (var c in db.Cuotas.Include("Prestamo.Cliente")
                          .Where(c => c.Estado == EstadoCuota.Pendiente || c.Estado == EstadoCuota.Vencida || c.Estado == EstadoCuota.Parcial)
                          .OrderBy(c => c.FechaVencimiento))
+            {
                 CuotasPendientes.Add(c);
+            }
+            CuotaSeleccionadaId = seleccionarId;
         }
 
         private void CargarPagos()
@@ -76,6 +71,14 @@ namespace AppPrestamos.ViewModels
                          .OrderByDescending(p => p.FechaPago)
                          .Take(50))
                 Pagos.Add(p);
+        }
+
+        partial void OnCuotaSeleccionadaIdChanged(int? value)
+        {
+            if (value.HasValue)
+                CuotaSeleccionada = CuotasPendientes.FirstOrDefault(c => c.Id == value.Value);
+            else
+                CuotaSeleccionada = null;
         }
 
         partial void OnCuotaSeleccionadaChanged(Cuota? value)
