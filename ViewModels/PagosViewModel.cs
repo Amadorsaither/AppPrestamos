@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
+using System.Windows.Threading;
 using AppPrestamos.Data;
 using AppPrestamos.Enums;
 using AppPrestamos.Models;
@@ -41,27 +42,30 @@ namespace AppPrestamos.ViewModels
 
         public PagosViewModel(int? cuotaId)
         {
-            CargarCuotasPendientes(cuotaId);
+            CargarCuotasPendientes();
             CargarPagos();
+
+            if (cuotaId.HasValue)
+                SeleccionarCuota(cuotaId.Value);
+        }
+
+        private void SeleccionarCuota(int cuotaId)
+        {
+            var target = CuotasPendientes.FirstOrDefault(c => c.Id == cuotaId);
+            if (target is not null)
+                Dispatcher.CurrentDispatcher.BeginInvoke(() => CuotaSeleccionada = target);
         }
 
         partial void OnErrorFormularioChanged(string value) => OnPropertyChanged(nameof(TieneError));
 
-        private void CargarCuotasPendientes(int? seleccionarId = null)
+        private void CargarCuotasPendientes()
         {
             using var db = new AppDbContext();
             CuotasPendientes.Clear();
-            Cuota? seleccionada = null;
             foreach (var c in db.Cuotas.Include("Prestamo.Cliente")
                          .Where(c => c.Estado == EstadoCuota.Pendiente || c.Estado == EstadoCuota.Vencida || c.Estado == EstadoCuota.Parcial)
                          .OrderBy(c => c.FechaVencimiento))
-            {
                 CuotasPendientes.Add(c);
-                if (seleccionarId.HasValue && c.Id == seleccionarId.Value)
-                    seleccionada = c;
-            }
-            if (seleccionada is not null)
-                CuotaSeleccionada = seleccionada;
         }
 
         private void CargarPagos()
