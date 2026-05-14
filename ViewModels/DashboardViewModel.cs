@@ -166,20 +166,15 @@ namespace AppPrestamos.ViewModels
             var azul = SKColor.Parse("#3B82F6");
             var rojo = SKColor.Parse("#EF4444");
 
+            var blanco = SKColors.White;
             SeriesEstados = new ISeries[]
             {
                 new PieSeries<double> { Values = [activos], Name = "Activos", Fill = new SolidColorPaint(verde),
-                    HoverPushout = 5, InnerRadius = 60,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
-                    DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 },
+                    Stroke = new SolidColorPaint(blanco, 3), HoverPushout = 8, InnerRadius = 65 },
                 new PieSeries<double> { Values = [pagados], Name = "Pagados", Fill = new SolidColorPaint(azul),
-                    InnerRadius = 60,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
-                    DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 },
+                    Stroke = new SolidColorPaint(blanco, 3), HoverPushout = 8, InnerRadius = 65 },
                 new PieSeries<double> { Values = [mora], Name = "En Mora", Fill = new SolidColorPaint(rojo),
-                    InnerRadius = 60,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
-                    DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 }
+                    Stroke = new SolidColorPaint(blanco, 3), HoverPushout = 8, InnerRadius = 65 }
             };
 
             Vencimientos.Clear();

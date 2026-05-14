@@ -127,20 +127,15 @@ namespace AppPrestamos.ViewModels
             var pagados = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.Pagado);
             var mora = db.Prestamos.Count(p => p.Estado == EstadoPrestamo.EnMora);
 
+            var blanco = SKColors.White;
             SeriesEstadoPrestamos = new ISeries[]
             {
                 new PieSeries<double> { Values = [activos], Name = "Activos", Fill = new SolidColorPaint(verde),
-                    HoverPushout = 5, InnerRadius = 40,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
-                    DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 },
+                    Stroke = new SolidColorPaint(blanco, 3), HoverPushout = 8, InnerRadius = 55 },
                 new PieSeries<double> { Values = [pagados], Name = "Pagados", Fill = new SolidColorPaint(azul),
-                    InnerRadius = 40,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
-                    DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 },
+                    Stroke = new SolidColorPaint(blanco, 3), HoverPushout = 8, InnerRadius = 55 },
                 new PieSeries<double> { Values = [mora], Name = "En Mora", Fill = new SolidColorPaint(rojo),
-                    InnerRadius = 40,
-                    DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Outer,
-                    DataLabelsPaint = new SolidColorPaint(SKColor.Parse("#1E293B")), DataLabelsSize = 12 }
+                    Stroke = new SolidColorPaint(blanco, 3), HoverPushout = 8, InnerRadius = 55 }
             };
 
             var ingresosMensuales = new double[12];

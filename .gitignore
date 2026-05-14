@@ -13,3 +13,8 @@ obj/
 *.db
 *.db-shm
 *.db-wal
+
+# Publicaciones / builds
+publish/
+publish2/
+*.zip

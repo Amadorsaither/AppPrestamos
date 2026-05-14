@@ -113,26 +113,8 @@
                                    Foreground="#0F172A" Margin="0,0,0,5"/>
                         <TextBlock Text="Distribución general" FontSize="11" Foreground="#475569" Margin="0,0,0,10"/>
                         <lvc:PieChart Series="{Binding SeriesEstadoPrestamos}"
-                                      Height="220" TooltipPosition="Hidden" Margin="0,0,0,10"/>
-                        <Grid Margin="0,5,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                                <Border Width="10" Height="10" CornerRadius="3" Background="#10B981" Margin="0,0,0,3"/>
-                                <TextBlock Text="Activos" FontSize="11" Foreground="#334155"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                                <Border Width="10" Height="10" CornerRadius="3" Background="#3B82F6" Margin="0,0,0,3"/>
-                                <TextBlock Text="Pagados" FontSize="11" Foreground="#334155"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                                <Border Width="10" Height="10" CornerRadius="3" Background="#EF4444" Margin="0,0,0,3"/>
-                                <TextBlock Text="En Mora" FontSize="11" Foreground="#334155"/>
-                            </StackPanel>
-                        </Grid>
+                                      Height="220" TooltipPosition="Hidden" Margin="0,0,0,10"
+                                      InitialRotation="-90"/>
                     </StackPanel>
                 </Border>
 
