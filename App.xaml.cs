@@ -51,6 +51,7 @@ namespace AppPrestamos
                 ");
             }
             new AuthService().SeedAdminSiNoExiste();
+            SeedData.Seed();
         }
 
         /// <summary>
