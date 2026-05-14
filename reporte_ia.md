@@ -10,7 +10,7 @@
 
 ## Herramienta de Inteligencia Artificial Utilizada
 
-Se utilizó **opencode** (modelo big-pickle) como herramienta de asistencia técnica durante el desarrollo del proyecto. Su función fue equivalente a la de un programador junior que recibe instrucciones detalladas y ejecuta tareas específicas bajo supervisión constante.
+Se utilizó **opencode y Open Ai Chap Gpt** (modelo big-pickle) como herramienta de asistencia técnica durante el desarrollo del proyecto. Su función fue equivalente a la de un programador junior que recibe instrucciones detalladas y ejecuta tareas específicas bajo supervisión constante.
 
 ---
 
